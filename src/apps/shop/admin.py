@@ -3,15 +3,24 @@ from typing import Any, List, Tuple
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from django.contrib import admin
-from .models import Brand, Discount, Giftcode, Product, ProductAttribute, Order, OrderItem, ProductCategory, ProductImages, ProductRecommendation, Shipping, Warranty
+from .models import (Brand, Discount, Giftcode, Product,
+                     ProductAttribute, Order, OrderItem,
+                     ProductAttributeValue, ProductCategory,
+                     ProductImage, ProductRecommendation,
+                     Shipping, Warranty)
 
 
-class ProductImagesInline(admin.TabularInline):
-    model = ProductImages
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
 
 
 class ProductAttributeInline(admin.TabularInline):
     model = ProductAttribute
+    extra = 1
+
+
+class ProductAttributeValueInline(admin.TabularInline):
+    model = ProductAttributeValue
     extra = 1
 
 
@@ -43,7 +52,7 @@ class ProductAdmin(ImportExportModelAdmin):
     list_display = ['id', 'title', 'price', 'published_status', 'created_at']
     list_filter = ['price', 'published_status']
     search_fields = ['title']
-    inlines = [ProductAttributeInline]
+    inlines = [ProductAttributeValueInline]
     actions = ['enable_track_stock']
     prepopulated_fields = {
         'slug': ('title',)
@@ -93,7 +102,7 @@ class DiscountAdmin(ImportExportModelAdmin):
 class BrandResource(resources.ModelResource):
     class Meta:
         model = Brand
-        fields = ('id','title')
+        fields = ('id', 'title')
 
 
 @admin.register(Brand)

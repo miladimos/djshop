@@ -12,11 +12,13 @@ class Media(BaseModel):
         max_length=250, null=True, blank=True, editable=False)
 
     def save(self, *args, **kwargs):
-        self.file_size = self.image.size
-        hasher = hashlib.sha1()
-        for chunk in self.image.file.chunks():
-            hasher.update(chunk)
-        self.file_hash = hasher.hexdigest()
+        if not self.image.closed():
+            self.file_size = self.image.size
+            hasher = hashlib.sha1()
+            for chunk in self.image.file.chunks():
+                hasher.update(chunk)
+            self.file_hash = hasher.hexdigest()
+        
         super().save(*args, **kwargs)
 
 

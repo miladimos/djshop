@@ -12,3 +12,13 @@ add caching layer
 add pylint
 create product unique code 
 add minio
+
+send log/backup files to google driver , ftp server , email
+
+add select receive date time like digikala
+
+add invoice page for orders - pdf
+
+add captcha
+
+add user activities

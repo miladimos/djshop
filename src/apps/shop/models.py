@@ -197,7 +197,7 @@ class Product(BaseModel):
     #         super().save(*args, **kwargs)
 
 
-class ProductImages(BaseModel):
+class ProductImage(BaseModel):
     # order priority
     product = models.ForeignKey(
         Product, related_name='images', on_delete=models.CASCADE)
@@ -391,7 +391,7 @@ class Giftcode(BaseModel):
 
         self.save()
 
-
+# shipping method : post - tipaks - peyk
 class Shipping(BaseModel):
     title = models.CharField(
         max_length=255, unique=True, verbose_name=_('عنوان'))

@@ -51,11 +51,11 @@ INSTALLED_APPS = [
     # Local apps
     'apps.core.apps.CoreConfig',
     'apps.accounts.apps.AccountsConfig',
+    'apps.payments.apps.PaymentsConfig',
     'apps.shop.apps.ShopConfig',
     'apps.blog.apps.BlogConfig',
     'apps.api.apps.ApiConfig',
     'apps.pages.apps.PagesConfig',
-    'apps.payments.apps.PaymentsConfig',
     'apps.friendships.apps.FriendshipConfig',
     'apps.shortener.apps.ShortenerConfig',
     'apps.notifications.apps.NotificationsConfig',

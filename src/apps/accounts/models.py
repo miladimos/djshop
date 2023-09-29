@@ -4,7 +4,7 @@ import string
 import uuid
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import AbstractUser, PermissionsMixin, UserManager
+from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from apps.core.models import BaseModel
 from apps.payments.models import IrBank
@@ -37,9 +37,9 @@ class User(AbstractUser):
     # mobile_verified = models.BooleanField(default=False)
     # USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['mobile']
-    
+
     # objects = UserManager()
-    
+
     def __str__(self):
         return self.username
 
@@ -76,11 +76,11 @@ class UserProfile(BaseModel):
 class UserMeta(BaseModel):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE)
-    
+
     last_login_at = models.DateTimeField(null=True, blank=True)
     last_login_ip = models.GenericIPAddressField(null=True, blank=True)
     last_logout_at = models.DateTimeField(null=True, blank=True)
-    last_login_agent = models.TextField(null=True,blank=True)
+    last_login_agent = models.TextField(null=True, blank=True)
     email_verified_at = models.DateTimeField(null=True, blank=True)
     email_changed_at = models.DateTimeField(null=True, blank=True)
     mobile_changed_at = models.DateTimeField(null=True, blank=True)
@@ -90,7 +90,6 @@ class UserMeta(BaseModel):
     is_banned = models.BooleanField(default=False)
     banned_at = models.DateTimeField(null=True, blank=True)
     unbanned_at = models.DateTimeField(null=True, blank=True)
-
 
 
 class Address(BaseModel):
@@ -119,11 +118,19 @@ class UserBank(BaseModel):
     account_number = models.CharField(
         max_length=250, verbose_name=_('شماره حساب'))
 
+    class Meta:
+        verbose_name = _('بانک کاربر')
+        verbose_name_plural = _('بانک کاربر ها')
+
 
 class Wallet(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.PositiveBigIntegerField(
         verbose_name=_('موجودی'), default=0)
+
+    class Meta:
+        verbose_name = _('کیف پول')
+        verbose_name_plural = _('کیف پول ها')
 
 
 class AccountDeleteRequest(BaseModel):
@@ -140,7 +147,8 @@ class OtpRequest(models.Model):
         WEB = 'w', _("web")
 
     request_id = models.UUIDField(default=uuid.uuid4, editable=False)
-    channel = models.CharField(_('channel'),max_length=20, choices=OtpChannel.choices)
+    channel = models.CharField(
+        _('channel'), max_length=20, choices=OtpChannel.choices)
     mobile = models.CharField(max_length=12)
     password = models.CharField(max_length=4, null=True)
     valid_form = models.DateTimeField(default=timezone.now)

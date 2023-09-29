@@ -1,15 +1,15 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from apps.core.models import BaseModel
-# from apps.accounts.models import User
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 
+
 class Payment(BaseModel):
     class PaymentGateway(models.TextChoices):
         pass
-    
+
     class PaymentStatus(models.TextChoices):
         pass
 
@@ -25,7 +25,7 @@ class Payment(BaseModel):
     reference_id = models.CharField(
         unique=True, verbose_name=_('کد مرجع'), max_length=100)
     # payment_for = 'wallet_charge, online buy'
-    gateway = models.CharField(max_length=10,verbose_name=_('درگاه پرداخت'))
+    gateway = models.CharField(max_length=10, verbose_name=_('درگاه پرداخت'))
     amount = models.PositiveBigIntegerField(default=0, verbose_name=_('قیمت'))
     payment_method = models.CharField(
         max_length=5,
@@ -46,6 +46,10 @@ class Factor(BaseModel):
         Payment, on_delete=models.CASCADE, verbose_name=_("پرداخت مرتبط"))
     file = models.FileField(verbose_name=_('فایل فاکتور'))
 
+    class Meta:
+        verbose_name = _('فاکتور')
+        verbose_name_plural = _('فاکتور ها')
+
 
 class IrBank(BaseModel):
     title = models.CharField(
@@ -53,9 +57,21 @@ class IrBank(BaseModel):
     logo = models.CharField(max_length=255, verbose_name=_(
         'لوگو'), unique=True, blank=True, null=True)
 
+    class Meta:
+        verbose_name = _('بانک')
+        verbose_name_plural = _('بانک ها')
+
 
 class Payout(BaseModel):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name=_("کاربر"))
 
-    # user_id , bank_id, amount,description,approved_at
+    bank = models.ForeignKey(
+        'accounts.UserBank', on_delete=models.CASCADE, verbose_name=_("بانک"))
+    price = models.PositiveBigIntegerField(verbose_name=_('مبلغ'))
+    description = models.CharField(max_length=255, verbose_name=_('توضیحات'), null=True, blank=True)
+    approved_at = models.DateTimeField(null=True,blank=True) 
+    
+    class Meta:
+        verbose_name = _('درخواست تسویه حساب')
+        verbose_name_plural = _('درخواست تسویه حساب ها')  
