@@ -5,7 +5,7 @@ from import_export.admin import ImportExportModelAdmin
 # from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 
-admin.site.register(User,UserAdmin)
+admin.site.register(User, UserAdmin)
 
 # @admin.register(User, UserAdmin)
 # class UserAdmin(ImportExportModelAdmin):

@@ -8,7 +8,7 @@ User = settings.AUTH_USER_MODEL
 
 class Payment(BaseModel):
     class PaymentGateway(models.TextChoices):
-        pass
+        zarinpal = 'z', _('زرین پال')
 
     class PaymentStatus(models.TextChoices):
         pass
@@ -25,8 +25,9 @@ class Payment(BaseModel):
     reference_id = models.CharField(
         unique=True, verbose_name=_('کد مرجع'), max_length=100)
     # payment_for = 'wallet_charge, online buy'
-    gateway = models.CharField(max_length=10, verbose_name=_('درگاه پرداخت'))
-    amount = models.PositiveBigIntegerField(default=0, verbose_name=_('قیمت'))
+    gateway = models.CharField(
+        max_length=2, choices=PaymentGateway.choices, verbose_name=_('درگاه پرداخت'))
+    price = models.PositiveBigIntegerField(default=0, verbose_name=_('قیمت'))
     payment_method = models.CharField(
         max_length=5,
         choices=PaymentMethods.choices, blank=True, default='o', verbose_name=_('روش پرداخت'))
@@ -69,9 +70,10 @@ class Payout(BaseModel):
     bank = models.ForeignKey(
         'accounts.UserBank', on_delete=models.CASCADE, verbose_name=_("بانک"))
     price = models.PositiveBigIntegerField(verbose_name=_('مبلغ'))
-    description = models.CharField(max_length=255, verbose_name=_('توضیحات'), null=True, blank=True)
-    approved_at = models.DateTimeField(null=True,blank=True) 
-    
+    description = models.CharField(
+        max_length=255, verbose_name=_('توضیحات'), null=True, blank=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
+
     class Meta:
         verbose_name = _('درخواست تسویه حساب')
-        verbose_name_plural = _('درخواست تسویه حساب ها')  
+        verbose_name_plural = _('درخواست تسویه حساب ها')
